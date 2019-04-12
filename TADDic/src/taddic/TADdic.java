@@ -21,6 +21,7 @@ public class TADdic {
     private double fatorCarga = 0.75; //usado para descobrir numero de registros no dic
     private int qtdEntradas = 0;
     private HashEngine he = null;
+    private boolean achou = false;
         
     /*Construtores*/
     public TADdic(int qtdIniEntradas){
@@ -41,6 +42,15 @@ public class TADdic {
             vetList[i] = new LinkedList<TDicItem>();
         }
         he = new HashEngDefault();
+    }
+    public TADdic(HashEngine eng){
+        int tam = 100;
+        vetList = new LinkedList[tam];
+        
+        for (int i = 0; i<tam;i++){
+            vetList[i] = new LinkedList<TDicItem>();
+        }
+        he = eng;
     }
     
     /*Função responsável por transformar a chave em um número inteiro
@@ -84,7 +94,7 @@ public class TADdic {
         return qtdEntradas;
     }
     
-    public long fHash2(String k){
+    public long hashFuncPol(String k){
         long soma = 0;
         for(int exp = 0; exp<k.length(); exp++){
             soma+=(int)k.charAt(exp)^exp;
@@ -92,30 +102,53 @@ public class TADdic {
         return soma;
     }
     
+    private int lenMaiorList(){
+        int maior = 0;
+        for (int i = 0; i < vetList.length; i++) {
+            if(vetList[i] != null){
+                if(vetList[i].size() > maior)
+                    maior = vetList[i].size();
+            }
+        }
+        return maior;
+    }
     /**/
-    public void insertItem(String k, RegDados e){
-        RegDados aux = findElement(k);
+    public void insertItem(Object k, Object e){
+        Object aux = findElement(k);
+        long hashCode = he.hashFunction(k);
+        int index = (int) hashCode % vetList.length;
         if(aux == null){
-            long hashCode = hashFunction(k);
-            int index = (int) hashCode % vetList.length;
-
-            vetList[index].add(e);
+            vetList[index].add(new TDicItem(k, e));
             qtdEntradas++;
         }else{ 
-            aux.setWen(e.getWen());
+            int pos = buscaDItem(vetList[index],k);
+            if(pos != -1)
+                ((TDicItem)(vetList[index].get(pos))).setValor(e);
         }
+    }
+    
+    public int buscaDItem(LinkedList lst, Object k){
+        int pos = 0;
+        
+        while(pos < lst.size()){
+            if(((TDicItem)(lst.get(pos))).getChave().equals(k))
+                return pos;
+            pos++;
+        }
+        return -1;
     }
     /*Recebe a chave, converte para o código hash correspondente e faz a busca,
     retornando se achar*/
-    public RegDados findElement(String k){
-        long hashCode = hashFunction(k);
+    public Object findElement(Object k){
+        long hashCode = he.hashFunction(k);
         int index = (int) hashCode % vetList.length;
         /*Acessa a lista no índice da chave
         Percorre até achar a chave em si e retorna o elemento*/
         int posLst = 0;
         while(posLst < vetList[index].size()){
-            if(((RegDados)vetList[index].get(posLst)).getWpt().equals(k)){
-                return (RegDados)vetList[index].get(posLst);
+            if(((TDicItem)vetList[index].get(posLst)).getChave().equals(k)){
+                achou = true;
+                return vetList[index].get(posLst);
             }
             posLst++;
         }
@@ -124,31 +157,39 @@ public class TADdic {
     
     public LinkedList keys(){
         LinkedList chaves = new LinkedList();
-        for(int i=0; i<this.getSizeList() ;i++){
-            int posLst = 0;
-            while(posLst < vetList[i].size()){
-                chaves.add(((RegDados)vetList[i].get(posLst)).getWpt());
-                posLst++;
-            }
+        if(!isEmpty()){
+            for(int i=0; i<getSizeList() ;i++)
+                if(vetList[i].size() > 0){
+                    int posLst = 0;
+                    while (posLst < vetList[i].size()) {
+                        chaves.add(((TDicItem) vetList[i].get(posLst)).getChave());
+                        posLst++;
+                    }
+                } 
+            
         }
         return chaves;
     }
     
      
-    public LinkedList elements(){
-        LinkedList elems = new LinkedList();
+    public LinkedList<TDicItem> elements(){
+        LinkedList<TDicItem> elems = new LinkedList<TDicItem>();
+        
+        if(!isEmpty()){
+            
+        }
         for(int i=0; i<this.getSizeList() ;i++){
             int posLst = 0;
             while(posLst < vetList[i].size()){
-                elems.add(((RegDados)vetList[i].get(posLst)).getWen());
+                elems.add(((TDicItem)vetList[i].get(posLst)));
                 posLst++;
             }
         }
         return elems;
     }
-    
-    public RegDados removeElement(String k){
-         RegDados aux = findElement(k);
+    //Dúvida
+    public Object removeElement(Object k){
+         Object aux = findElement(k);
          if(aux == null){
              return null;
          } else {
@@ -158,8 +199,7 @@ public class TADdic {
              /*Acessa a lista no índice da chave
              Percorre até achar a chave em si e deleta o elemento*/
              int posLst = 0;
-             while(posLst < vetList[index].size() && 
-                     ((RegDados)vetList[index].get(posLst)).getWpt().equals(k)){
+             while(posLst < vetList[index].size()){
                  posLst++;
              }
              vetList[index].remove(posLst-1);
