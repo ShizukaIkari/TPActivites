@@ -53,35 +53,6 @@ public class TADdic {
         he = eng;
     }
     
-    /*Função responsável por transformar a chave em um número inteiro
-    Transforma a chave em vetor de bytes e os soma
-    */
-    private long hashFunction(Object k){
-        long soma = 0;
-        
-        ByteArrayOutputStream bus = new ByteArrayOutputStream();
-        ObjectOutput out = null;
-        byte[] vetBytes = null;
-               
-        try{
-            out = new ObjectOutputStream(bus);
-            out.writeObject(k);
-            out.flush();
-            vetBytes = bus.toByteArray();
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            bus.close();
-        } catch (IOException ex) {
-            //ignore
-        }
-        for(int i=0; i<vetBytes.length;i++){
-            soma += (int)vetBytes[i];
-        }
-        return soma;
-    }
-    
     public boolean isEmpty(){
         return qtdEntradas == 0;
     }
@@ -89,19 +60,13 @@ public class TADdic {
     public int getSizeList(){
         return vetList.length;
     }
+    
     /*Retorna o número de itens no dicionário*/
     public int size(){
         return qtdEntradas;
     }
     
-    public long hashFuncPol(String k){
-        long soma = 0;
-        for(int exp = 0; exp<k.length(); exp++){
-            soma+=(int)k.charAt(exp)^exp;
-        }
-        return soma;
-    }
-    
+    /*Método para gerenciar colisões*/
     private int lenMaiorList(){
         int maior = 0;
         for (int i = 0; i < vetList.length; i++) {
@@ -126,7 +91,7 @@ public class TADdic {
                 ((TDicItem)(vetList[index].get(pos))).setValor(e);
         }
     }
-    
+    /*Método auxiliar para método REMOVE*/
     public int buscaDItem(LinkedList lst, Object k){
         int pos = 0;
         
@@ -152,9 +117,15 @@ public class TADdic {
             }
             posLst++;
         }
+        achou = false;
         return null;
     }
     
+    public boolean NO_SUCH_KEY(){
+        return achou;
+    }
+    
+    /*Return list with all keys*/
     public LinkedList keys(){
         LinkedList chaves = new LinkedList();
         if(!isEmpty()){
@@ -166,47 +137,71 @@ public class TADdic {
                         posLst++;
                     }
                 } 
-            
         }
         return chaves;
     }
     
-     
+    /*Return all objects inside the dictionary*/
     public LinkedList<TDicItem> elements(){
-        LinkedList<TDicItem> elems = new LinkedList<TDicItem>();
-        
+        LinkedList<TDicItem> elems = null;
+        /*It must not be empty*/
         if(!isEmpty()){
+            elems = new LinkedList<>();
             
-        }
-        for(int i=0; i<this.getSizeList() ;i++){
-            int posLst = 0;
-            while(posLst < vetList[i].size()){
-                elems.add(((TDicItem)vetList[i].get(posLst)));
-                posLst++;
+            for(int i=0; i<this.getSizeList() ;i++){
+                int posLst = 0;
+                while(posLst < vetList[i].size()){
+                    elems.add(((TDicItem)vetList[i].get(posLst)));
+                    posLst++;
+                }
             }
         }
         return elems;
     }
-    //Dúvida
+    
     public Object removeElement(Object k){
          Object aux = findElement(k);
-         if(aux == null){
+         if(!NO_SUCH_KEY()){
              return null;
          } else {
-             long codHash = hashFunction(k);
+             long codHash = he.hashFunction(k);
              int index = (int)codHash %vetList.length;
              
              /*Acessa a lista no índice da chave
              Percorre até achar a chave em si e deleta o elemento*/
-             int posLst = 0;
-             while(posLst < vetList[index].size()){
-                 posLst++;
+             
+             int posLst = buscaDItem(vetList[index],k);
+             if(posLst != -1){
+                vetList[index].remove(posLst);
+                qtdEntradas--;
              }
-             vetList[index].remove(posLst-1);
-             qtdEntradas--;
              return aux;
          } 
      }
+    
+    public TADdic clone(){
+        System.out.println("Implementar");
+        return null;
+    }
+    private void redimensiona(){
+        int newTam = 2*vetList.length;
+        LinkedList[] nVetList = new LinkedList[newTam];
+        
+        for(int i = 0; i < getSizeList(); i++) {
+            if(vetList[i] != null) {
+                for(int j = 0; j <vetList[i].size(); j++) {
+                    Object aux = (TDicItem)vetList[i].get(j);
+                    
+                    long cod_hash = he.hashFunction(((TDicItem)vetList[i].get(j)).getChave());
+                    int indice = (int)cod_hash % nVetList.length;
+                    
+                    nVetList[indice].add(aux);
+                }
+            }
+        }
+        
+        vetList = nVetList;
+    }
     
     public int[] getColisions(){
         int[] numCol = new int[this.size()];
@@ -225,18 +220,6 @@ public class TADdic {
      
       
     public static void main(String[] args){
-        TADdic dic = new TADdic(8);
-        dic.insertItem("Teclas", new RegDados("Teclas", "Keys"));
-        dic.insertItem("Palavra", new RegDados("Palavra", "Word"));
-            
-        dic.insertItem("Eu", new RegDados("Eu", "I"));
-
-        System.out.println(dic.keys());
-        System.out.println(dic.elements());
-        dic.removeElement("Eu");
-        System.out.println(dic.keys());
-        System.out.println(dic.elements());
-        System.out.println(dic.size());
-            
+        
     }
 }
