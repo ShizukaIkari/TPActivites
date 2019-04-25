@@ -180,8 +180,19 @@ public class TADdic {
      }
     
     public TADdic clone(){
-        System.out.println("Implementar");
-        return null;
+        TADdic dicClone = new TADdic(he);
+        for (int i =0;i<vetList.length;i++)
+            for (int k =0; k < vetList[i].size();k++){
+                Object chave = ((TDicItem) vetList[i].get(k)).getChave();
+                Object dado = ((TDicItem) vetList[i].get(k)).getValor();
+                dicClone.insertItem(chave, dado);
+            }
+        return dicClone;
+    }
+    
+    //Fazer metodo equals 
+    public boolean equals(){
+        return true;
     }
     private void redimensiona(){
         int newTam = 2*vetList.length;
