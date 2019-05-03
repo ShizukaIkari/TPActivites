@@ -10,27 +10,37 @@ package taddic;
  * @author Serenna
  */
 public class TDicItem {
-    private Object chave;
-    private Object valor;
+    private Object key;
+    private Object dado;
+    private long cach_hash; 
     
     public TDicItem(Object chave, Object valor) {
-        this.chave = chave;
-        this.valor = valor;
+        this.key = chave;
+        this.dado = valor;
     }
     
-    public Object getChave() {
-        return chave;
+    public Object getKey() {
+        return key;
     }
     
-    public Object getValor() {
-        return valor;
+    public Object getDado() {
+        return dado;
     }
     
-    public void setChave(Object chave) {
-        this.chave = chave;
+    public void setKey(Object key) {
+        this.key = key;
     }
     
-    public void setValor(Object valor) {
-        this.valor = valor;
+    public void setDado(Object dado) {
+        this.dado = dado;
     }
+
+    public long getCach_hash() {
+        return cach_hash;
+    }
+
+    public void setCach_hash(long cach_hash) {
+        this.cach_hash = cach_hash;
+    }
+    
 }
