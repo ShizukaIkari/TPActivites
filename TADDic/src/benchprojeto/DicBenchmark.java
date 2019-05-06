@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import _my_tools.*;
+import hashFunctions.HashFNV;
 
 class RegMD {
 	private String cpf;
@@ -54,8 +55,9 @@ class RegMD {
 public class DicBenchmark {
 	public static void main(String[] args) {
 		int TAM_TESTE = 50000;
+               
 		TADDicChain dicA = new TADDicChain();
-		ArquivoTxt arqIn = ArquivoTxt.open("./src/ifes/bsi/tpa/dic/maladireta.csv", "rt");
+		ArquivoTxt arqIn = ArquivoTxt.open("./src/benchprojeto/maladireta.csv", "rt");
 		
 		HashMap<Object, Object> hm = new HashMap<Object, Object>();
 		

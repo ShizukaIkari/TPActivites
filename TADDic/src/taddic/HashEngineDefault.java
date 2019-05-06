@@ -17,7 +17,7 @@ import java.io.ObjectOutputStream;
 public class HashEngineDefault extends Hash_engine {
 
     @Override
-    public long hashFunction(Object k) {
+    public long hash_func(Object k) {
         long soma = 0;
         
         ByteArrayOutputStream bus = new ByteArrayOutputStream();

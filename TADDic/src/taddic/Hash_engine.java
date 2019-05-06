@@ -10,5 +10,5 @@ package taddic;
  * @author Serenna
  */
 public abstract class Hash_engine {
-    public abstract long hashFunction(Object k);
+    public abstract long hash_func(Object k);
 }
