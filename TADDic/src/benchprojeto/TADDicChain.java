@@ -14,7 +14,7 @@ import java.util.LinkedList;
  */
 public class TADDicChain {
 
-    private LinkedList[] vetBuckets = null;
+    private LinkedList<TDicItem>[] vetBuckets = null;
     private double fator_de_carga = 0.75; //usado para descobrir numero de registros no dic
     private int quant_entradas = 0;
     private Hash_engine he = null;
@@ -53,7 +53,7 @@ public class TADDicChain {
     public boolean isEmpty(){
         return quant_entradas == 0;
     }
-    /*Retorna o tamanho das listas do vetor?*/
+    /*Retorna o tamanho das listas do vetor*/
     public int getSizeVetBuckets(){
         return vetBuckets.length;
     }
@@ -80,7 +80,7 @@ public class TADDicChain {
         if(lenMaiorList() >=  getSizeVetBuckets()* 0.3 ){
             redimensiona();
         }
-        Object aux = findElement(k);
+        Object aux = findItem(k);
         int index;
         //Caso seja um elemento novo, calcula o hashCode e adiciona no dicionario
         if(NO_SUCH_KEY()){
@@ -92,7 +92,7 @@ public class TADDicChain {
             quant_entradas++;
         }else{
             //Se o elemento já existe e só alteraremos o dado, pegamos o hashCode no tdicitem
-            index = (int)((TDicItem)aux).getCach_hash() % vetBuckets.length;
+            index = (int)aux.getCach_hash() % vetBuckets.length;
             int pos = buscaDItem(vetBuckets[index],k);
             if(pos != -1)
                 ((TDicItem)(vetBuckets[index].get(pos))).setDado(e);
@@ -127,6 +127,20 @@ public class TADDicChain {
         achou = false;
         return null;
     }
+    /*Método interno análogo ao findElement, porém retornará o TDicItem
+      Dúvida: ele deve mexer no achou? >> decisão provisória - SIM*/
+    private TDicItem findItem(Object k){
+        long hashCode = he.hash_func(k);
+        int index = (int) hashCode % vetBuckets.length;
+        for(int i = 0; i<vetBuckets[index].size();i++)
+            if(((TDicItem)vetBuckets[index].get(posLst)).getKey().equals(k)){
+               achou = true;
+               return vetBuckets[index].get(i);
+             }
+        achou = false;
+        return null;
+    }
+
     /*Default: false, é alterado quando findElement é usado*/
     public boolean NO_SUCH_KEY(){
         return !achou;
@@ -167,16 +181,13 @@ public class TADDicChain {
     }
     
     public Object removeElement(Object k){
-         Object aux = findElement(k);
+         Object aux = findItem(k);
          
          if(NO_SUCH_KEY()){
              return null;
          } else {
-            long hashCode = he.hash_func(k);
-            int index = (int) hashCode % vetBuckets.length;
-            
-             
-             /*Acessa a lista no índice da chave
+            int index = (int) aux.getCach_Hash% vetBuckets.length;
+            /*Acessa a lista no índice da chave
              Percorre até achar a chave em si e deleta o elemento*/
              
              int posLst = buscaDItem(vetBuckets[index],k);
