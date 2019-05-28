@@ -20,39 +20,40 @@ public class TADDicChain {
     private boolean achou = false;
         
     /*Construtores*/
-    public TADDicChain(int qtdIniEntradas){
-        int tam = (int)(qtdIniEntradas/fator_de_carga);
+    public TADDicChain(int qtdEnt, Hash_engine he){
+        int tam = (int)(qtdEnt/fator_de_carga);
         vetBuckets = new LinkedList[tam];
         
         for (int i = 0; i<tam;i++){
             vetBuckets[i] = new LinkedList<TDicItem>();
         }
-        he = new HashEngineDefault();
-    }
-    
-    public TADDicChain(){
-        int tam = 100;
-        vetBuckets = new LinkedList[tam];
-        
-        for (int i = 0; i<tam;i++){
-            vetBuckets[i] = new LinkedList<TDicItem>();
+        if(he == null) {
+            he = new HashEngineDefault();
         }
-        he = new HashEngineDefault();
+        else {
+            this.he = he;
+        }
     }
+ 
     public TADDicChain(Hash_engine he){
-        int tam = 100;
+        int tam = 1024;
         vetBuckets = new LinkedList[tam];
         
         for (int i = 0; i<tam;i++){
             vetBuckets[i] = new LinkedList<TDicItem>();
         }
-        this.he = he;
+        if(he == null) {
+            he = new HashEngineDefault();
+        }
+        else {
+            this.he = he;
+        }
     }
     
     public boolean isEmpty(){
         return quant_entradas == 0;
     }
-    /*Retorna o tamanho das listas do vetor?*/
+    /*Retorna o tamanho das listas do vetor*/
     public int getSizeVetBuckets(){
         return vetBuckets.length;
     }
@@ -80,18 +81,15 @@ public class TADDicChain {
             redimensiona();
         }
         Object aux = findElement(k);
-        int index;
+        long hashCode = he.hash_func(k);
+        int index = index = (int) hashCode % vetBuckets.length;
         //Caso seja um elemento novo, calcula o hashCode e adiciona no dicionario
         if(NO_SUCH_KEY()){
-            long hashCode = he.hash_func(k);
-            index = (int) hashCode % vetBuckets.length;
             TDicItem item = new TDicItem(k, e);
-            item.setCach_hash(hashCode);
+            item.setCash_hash(hashCode);
             vetBuckets[index].add(item);
             quant_entradas++;
         }else{
-            //Se o elemento já existe e só alteraremos o dado, pegamos o hashCode no tdicitem
-            index = (int)((TDicItem)aux).getCach_hash() % vetBuckets.length;
             int pos = buscaDItem(vetBuckets[index],k);
             if(pos != -1)
                 ((TDicItem)(vetBuckets[index].get(pos))).setDado(e);
@@ -119,13 +117,15 @@ public class TADDicChain {
         while(posLst < vetBuckets[index].size()){
             if(((TDicItem)vetBuckets[index].get(posLst)).getKey().equals(k)){
                 achou = true;
-                return vetBuckets[index].get(posLst);
+                return ((TDicItem)vetBuckets[index].get(posLst)).getDado();
             }
             posLst++;
         }
         achou = false;
         return null;
     }
+   
+
     /*Default: false, é alterado quando findElement é usado*/
     public boolean NO_SUCH_KEY(){
         return !achou;
@@ -133,46 +133,59 @@ public class TADDicChain {
     
     /*Return list with all keys*/
     public LinkedList keys(){
-        LinkedList chaves = new LinkedList();
+        LinkedList<TDicItem> itens = getItens(); 
+        LinkedList chaves = null;
+        
+        /*It must not be empty*/
         if(!isEmpty()){
-            for(int i=0; i<getSizeVetBuckets() ;i++)
-                if(vetBuckets[i].size() > 0){
-                    int posLst = 0;
-                    while (posLst < vetBuckets[i].size()) {
-                        chaves.add(((TDicItem) vetBuckets[i].get(posLst)).getKey());
-                        posLst++;
-                    }
-                } 
+            chaves = new LinkedList();
+            //Getting the keys from each item
+            for(TDicItem it : itens){
+                chaves.add(it.getKey());
+            }
         }
         return chaves;
     }
     
     /*Return all objects inside the dictionary*/
-    public LinkedList<TDicItem> elements(){
-        LinkedList<TDicItem> elems = null;
+    public LinkedList<Object> elements(){
+        LinkedList<TDicItem> itens = getItens(); 
+        LinkedList elems = null;
+        
         /*It must not be empty*/
         if(!isEmpty()){
-            elems = new LinkedList<>();
-            
-            for(int i=0; i<this.getSizeVetBuckets() ;i++){
-                int posLst = 0;
-                while(posLst < vetBuckets[i].size()){
-                    elems.add(((TDicItem)vetBuckets[i].get(posLst)));
-                    posLst++;
-                }
+            elems = new LinkedList();
+            //Getting data from each item
+            for(TDicItem it : itens){
+                elems.add(it.getDado());
             }
         }
         return elems;
     }
     
+    public LinkedList getItens(){
+        LinkedList<TDicItem> itens = null;
+        if(!isEmpty()){
+            itens = new LinkedList<>();
+            
+            for(int i=0; i<this.getSizeVetBuckets() ;i++){
+                for(int j=0; j<vetBuckets[i].size();j++){
+                    itens.add(vetBuckets[i].get(j));
+                }
+            }
+        }
+        return itens;
+    }
+    
     public Object removeElement(Object k){
          Object aux = findElement(k);
+         
          if(NO_SUCH_KEY()){
              return null;
          } else {
-             int index = (int)((TDicItem)aux).getCach_hash() %vetBuckets.length;
-             
-             /*Acessa a lista no índice da chave
+            long cod_hash = he.hash_func(k);
+            int index = (int) cod_hash % vetBuckets.length;
+            /*Acessa a lista no índice da chave
              Percorre até achar a chave em si e deleta o elemento*/
              
              int posLst = buscaDItem(vetBuckets[index],k);
@@ -217,7 +230,7 @@ public class TADDicChain {
         return true;
     }
     private void redimensiona(){
-        int newTam = 2*vetBuckets.length;
+        int newTam = (int) (1.5*vetBuckets.length);
         LinkedList[] nVetList = new LinkedList[newTam];
         
         for( int i = 0; i < newTam; i++) 
@@ -228,7 +241,7 @@ public class TADDicChain {
                 for(int j = 0; j <vetBuckets[i].size(); j++) {
                     Object aux = vetBuckets[i].get(j);
                     
-                    long cod_hash = ((TDicItem)aux).getCach_hash();
+                    long cod_hash = ((TDicItem)aux).getCash_hash();
                     int indice = (int)cod_hash % nVetList.length;
                     
                     nVetList[indice].add((TDicItem)aux);
@@ -238,18 +251,12 @@ public class TADDicChain {
         vetBuckets = nVetList;
     }
     
-    public int[] getColisions(){
+    public int[] getVetColisoes(){
         int[] numCol = new int[this.size()];
         
         for(int i = 0; i<this.size();i++){
             numCol[i] = vetBuckets[i].size();
         }
         return numCol;
-    }
-    //Implementar
-    public String exibeDiagrama(int[] dic){
-        String nomeArqCSV = new String();
-        
-        return nomeArqCSV;
     }
 }

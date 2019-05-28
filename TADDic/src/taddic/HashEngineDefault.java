@@ -32,15 +32,17 @@ public class HashEngineDefault extends Hash_engine {
         }catch(IOException e) {
             e.printStackTrace();
         }
-        try {
-            bus.close();
-        } catch (IOException ex) {
-            //ignore
+        finally{
+            try {
+                bus.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
         for(int i=0; i<vetBytes.length;i++){
             soma += (int)vetBytes[i];
         }
-        return soma;
+        return Math.abs(soma);
     }
     
     

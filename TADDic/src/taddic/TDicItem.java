@@ -12,7 +12,7 @@ package taddic;
 public class TDicItem {
     private Object key;
     private Object dado;
-    private long cach_hash; 
+    private long cash_hash; 
     
     public TDicItem(Object chave, Object valor) {
         this.key = chave;
@@ -35,12 +35,12 @@ public class TDicItem {
         this.dado = dado;
     }
 
-    public long getCach_hash() {
-        return cach_hash;
+    public long getCash_hash() {
+        return cash_hash;
     }
 
-    public void setCach_hash(long cach_hash) {
-        this.cach_hash = cach_hash;
+    public void setCash_hash(long cash_hash) {
+        this.cash_hash = cash_hash;
     }
     
 }
