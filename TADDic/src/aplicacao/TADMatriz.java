@@ -168,20 +168,21 @@ public class TADMatriz {
             linhas++;   //Núm de linhas para instanciar matriz
             linha = s.nextLine(); //Pega conteúdo da linha atual
             String[] vet = linha.split(" ");    //Split separa os valores
-            //Ver se sem isso dá erro
+            //Pegando os valores, ignorando os espaços excessivos
             for (int i = 0; i < vet.length; i++) 
-                if (!vet[i].isEmpty()) 
+                if (!vet[i].isEmpty())
                     lst.addLast(vet[i]);
-              
+            //Na primeira linha processada, lst tem o mesmo size que as colunas
             if (linhas == 1) {
                 colunas = lst.size();
             }
         }
-
+        
         TADMatriz matriz = new TADMatriz(linhas, colunas);
         int posLst = 0;
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
+                System.out.println(Float.parseFloat(lst.get(posLst)));
                 matriz.setElem(i, j, (Float.parseFloat(lst.get(posLst))));
                 posLst++;
 
@@ -212,9 +213,40 @@ public class TADMatriz {
     }
     
     /*Funções auxiliares*/
+    
     //Checa se posições passadas estão dentro dos limites da matris
     private boolean isPosValid(int i, int j){
         return ((i > 0 && i<this.quantLinhas()) && (j > 0 && j<this.quantColunas()));
     }
     
+    //Retorna lista com elementos da diagonal principal da matriz (se esta for matriz quadrada)
+    public LinkedList diagPrincipal(){
+        LinkedList diag = null;
+        if (quantLinhas() == quantColunas()){
+             diag = new LinkedList();
+            for (int i = 0;i<quantLinhas();i++)
+                for(int j = 0; j<quantColunas();j++)
+                    if (i==j)
+                        diag.add(this.getElem(i,j));
+        }
+        else
+            System.out.println("Matriz não quadrada");
+        return diag;
+    }
+    
+    //Retorna lista com elementos da diagonal secundaria da matriz (se esta for matriz quadrada)
+    public LinkedList diagSecundaria(){
+        LinkedList diagS = null;
+        if (quantLinhas() == quantColunas()){
+            diagS = new LinkedList();
+            int n = quantColunas()-1;
+            for (int i = 0;i<quantLinhas();i++)
+                for(int j = quantColunas()-1; j<=0;j--)
+                    if (i+j == n)
+                        diagS.add(this.getElem(i,j));
+        }
+        else
+            System.out.println("Matriz não quadrada");
+        return diagS;
+    }
 }
