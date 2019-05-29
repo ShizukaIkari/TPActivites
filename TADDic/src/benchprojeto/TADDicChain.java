@@ -83,7 +83,7 @@ public class TADDicChain {
         }
         Object aux = findElement(k);
         long hashCode = he.hash_func(k);
-        int index = index = (int) hashCode % vetBuckets.length;
+        int index = (int) hashCode % vetBuckets.length;
         //Caso seja um elemento novo, calcula o hashCode e adiciona no dicionario
         if(NO_SUCH_KEY()){
             TDicItem item = new TDicItem(k, e);
@@ -194,6 +194,7 @@ public class TADDicChain {
                 vetBuckets[index].remove(posLst);
                 quant_entradas--;
              }
+             achou = false;
              return aux;
          } 
     }

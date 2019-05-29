@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import _my_tools.*;
-import hashFunctions.HashBernstein;
-import hashFunctions.HashFNV;
+import taddic.TADDicChain;
 import taddic.HashEngineDefault;
 import taddic.Hash_engine;
 

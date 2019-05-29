@@ -53,6 +53,7 @@ public class TADDicChain {
     public boolean isEmpty(){
         return quant_entradas == 0;
     }
+    
     /*Retorna o tamanho das listas do vetor*/
     public int getSizeVetBuckets(){
         return vetBuckets.length;
@@ -74,6 +75,7 @@ public class TADDicChain {
         }
         return maior;
     }
+    
     /*Função para inserir dados dentro do dicionário*/
     public void insertItem(Object k, Object e){
         //Para diminuir o número de colisões, aumenta o tamanho do dicionário
@@ -82,7 +84,7 @@ public class TADDicChain {
         }
         Object aux = findElement(k);
         long hashCode = he.hash_func(k);
-        int index = index = (int) hashCode % vetBuckets.length;
+        int index = (int) hashCode % vetBuckets.length;
         //Caso seja um elemento novo, calcula o hashCode e adiciona no dicionario
         if(NO_SUCH_KEY()){
             TDicItem item = new TDicItem(k, e);
@@ -95,6 +97,7 @@ public class TADDicChain {
                 ((TDicItem)(vetBuckets[index].get(pos))).setDado(e);
         }
     }
+    
     /*Método auxiliar para achar posição em dada lista*/
     private int buscaDItem(LinkedList lst, Object k){
         int pos = 0;
@@ -106,6 +109,7 @@ public class TADDicChain {
         }
         return -1;
     }
+    
     /*Recebe a chave, converte para o código hash correspondente e faz a busca,
     retornando se achar*/
     public Object findElement(Object k){
@@ -125,7 +129,6 @@ public class TADDicChain {
         return null;
     }
    
-
     /*Default: false, é alterado quando findElement é usado*/
     public boolean NO_SUCH_KEY(){
         return !achou;
@@ -193,6 +196,7 @@ public class TADDicChain {
                 vetBuckets[index].remove(posLst);
                 quant_entradas--;
              }
+             
              return aux;
          } 
     }
@@ -212,6 +216,7 @@ public class TADDicChain {
             }
         return dicClone;
     }
+    
     /*Compara os dois dicionários elemento por elemento,*/
     public boolean equals(TADDicChain dic){
         if(he == dic.getHashEngine()){
@@ -229,6 +234,7 @@ public class TADDicChain {
         }
         return true;
     }
+    
     private void redimensiona(){
         int newTam = (int) (1.5*vetBuckets.length);
         LinkedList[] nVetList = new LinkedList[newTam];
