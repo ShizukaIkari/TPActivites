@@ -46,7 +46,7 @@ public class Apmattpa {
             linha = scanner.nextLine();
             String[] dado = linha.split(","); //Conteúdo da linha
             
-            if(dado.length > 1 && !bdMat.contains(dado[0])){
+            if(dado.length >= 1 && !bdMat.contains(dado[0])){
             //Tratando conteúdo do dado
                 switch (dado[0]){
                     case "-":

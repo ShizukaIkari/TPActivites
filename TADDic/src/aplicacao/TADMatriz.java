@@ -125,12 +125,13 @@ public class TADMatriz {
             //Matriz resultante terá num de linhas da matriz corrente e de colunas da matriz multiplicada
             nMatriz =new TADMatriz(this.quantLinhas(), m.quantColunas());
             //Percorre linhas da matriz corrente
-            for (int i = 1; i <= this.quantLinhas(); i++) {
+            for (int i = 0; i < this.quantLinhas(); i++) {
                 //Percorre colunas da matriz a ser multiplicada
-                for (int j = 1; j <= m.quantColunas(); j++) {
+                for (int j = 0; j < m.quantColunas(); j++) {
                     //Elementos da coluna da matriz atual, para fazer calculo
-                    for (int k = 1; k <= this.quantColunas(); k++) {
-                        nMatriz.setElem(i, j, (nMatriz.getElem(i, j) + (this.getElem(i, k) * m.getElem(k, j))));
+                    for (int k = 0; k < this.quantColunas(); k++) {
+                        Float valor = nMatriz.getElem(i, j) + (this.getElem(i, k) * m.getElem(k, j));
+                        nMatriz.setElem(i, j, valor);
                     }
                 }
             }
