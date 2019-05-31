@@ -5,11 +5,13 @@
  */
 package aplicacao;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Serenna
  */
-public class Tupla {
+public class Tupla implements Serializable{
     private int linhaElem;
     private int colunElem;
     

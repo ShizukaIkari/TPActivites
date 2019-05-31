@@ -5,6 +5,7 @@
  */
 package aplicacao;
 
+import hashFunctions.HashSAX;
 import taddic.TADDicChain;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,19 +59,21 @@ public class TADMatriz {
     public TADMatriz(int linhas, int colunas){
         this.lins = linhas;
         this.cols = colunas;
-        this.dados = new TADDicChain(null); //null faz o dicionário usar HashDefault
+        this.dados = new TADDicChain(null);
     }
     
     //Retorna elemento na posição i,j (caso seja uma posição válida)
     public Float getElem(int i, int j){
         Float elem = null;
+        
         if(isPosValid(i, j)){
-            Tupla chave = new Tupla(i,j);
+            String chave = i+","+j;
             elem =(Float)this.dados.findElement(chave);
             //Se retorno for nulo, ou a chave não foi encontrada ou valor encontrado é nulo
             //Nos dois casos, o valor equivalente ali é zero
-            if (elem == null)
+            if (elem == null){
                 elem = 0F;
+            }
         }
         
         return elem;
@@ -78,9 +81,9 @@ public class TADMatriz {
     //Armazena valor na posição (i,j) da matriz, se a posição for válida
     public Float setElem(int i, int j, Float valor){
         if(isPosValid(i, j)){
-            Tupla chave = new Tupla(i, j);
+            String chave = i+","+j;
             
-            if(valor!=0)
+            if(valor!=0F)
                 dados.insertItem(chave, valor);
             else
                 dados.insertItem(chave, null);
@@ -103,10 +106,13 @@ public class TADMatriz {
     /*Multiplica elementos matriz por k */
     public void vezesK(float k){
         //Percorre todas as chaves
-        LinkedList<Tupla> posicoes = dados.keys();
-        for (Tupla chave : posicoes) {
-            Float valor = (Float)this.dados.findElement(chave);
-            this.dados.insertItem(chave, valor*k);
+        LinkedList<String> posicoes = dados.keys();
+        for (String chave : posicoes) {
+            
+            int i = Integer.parseInt(chave.substring(0, 1));
+            int j = Integer.parseInt(chave.substring(2, 3));
+            Float valor = getElem(i,j);
+            this.setElem(i,j, valor*k);
         }
     }
     
@@ -124,8 +130,7 @@ public class TADMatriz {
                 for (int j = 1; j <= m.quantColunas(); j++) {
                     //Elementos da coluna da matriz atual, para fazer calculo
                     for (int k = 1; k <= this.quantColunas(); k++) {
-                        
-                        nMatriz.setElem(i, j, nMatriz.getElem(i, j) + (this.getElem(i, k) * m.getElem(k, j)));
+                        nMatriz.setElem(i, j, (nMatriz.getElem(i, j) + (this.getElem(i, k) * m.getElem(k, j))));
                     }
                 }
             }
@@ -177,18 +182,15 @@ public class TADMatriz {
                 colunas = lst.size();
             }
         }
-        
         TADMatriz matriz = new TADMatriz(linhas, colunas);
         int posLst = 0;
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
-                System.out.println(Float.parseFloat(lst.get(posLst)));
-                matriz.setElem(i, j, (Float.parseFloat(lst.get(posLst))));
+                Float num = Float.parseFloat(lst.get(posLst));
+                matriz.setElem(i, j, num);
                 posLst++;
-
             }
         }
-
         return matriz;
     }
 
@@ -216,7 +218,7 @@ public class TADMatriz {
     
     //Checa se posições passadas estão dentro dos limites da matris
     private boolean isPosValid(int i, int j){
-        return ((i > 0 && i<this.quantLinhas()) && (j > 0 && j<this.quantColunas()));
+        return ((i >= 0 && i<this.quantLinhas()) && (j >= 0 && j<this.quantColunas()));
     }
     
     //Retorna lista com elementos da diagonal principal da matriz (se esta for matriz quadrada)
@@ -248,5 +250,16 @@ public class TADMatriz {
         else
             System.out.println("Matriz não quadrada");
         return diagS;
+    }
+    
+    public String toString(){
+        String matriz = "[ ";
+        for(int i=0; i<this.getLins();i++){
+            for(int j=0;j<this.getCols();j++){
+                matriz += this.getElem(i, j) + " ";
+            }
+            matriz+='\n';
+        }
+        return matriz+" ]";
     }
 }

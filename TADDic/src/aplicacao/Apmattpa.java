@@ -40,54 +40,84 @@ public class Apmattpa {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         //Percorrendo arquivo texto
 	while (scanner.hasNext()) {
             linha = scanner.nextLine();
             String[] dado = linha.split(","); //Conteúdo da linha
+            
+            if(dado.length > 1 && !bdMat.contains(dado[0])){
             //Tratando conteúdo do dado
-            for (int i = 0; i < dado.length; i++) {
-                //Caso dado seja uma das matrizes
-                if (bdMat.contains(dado[i])) {
-                    try {
-                        resultado = TADMatriz.carrega("C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\bdmatrizes/" + dado[i] + ".txt");
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else { //Operações com as matrizes
-                    if (dado[i].equals("t")) {
-                        aux = resultado.transposta();
-                    }else if(dado[i].equals("*")){
-                        if(bdMat.contains(dado[++i])){
-                            String matriz = "C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\bdmatrizes/" + dado[++i] + ".txt";
-                            try {
-                                aux = TADMatriz.carrega(matriz);
-                            } catch (FileNotFoundException ex) {
-                                Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            aux = resultado.multi(aux);
-                        }else{
-                            resultado.vezesK(Float.parseFloat(dado[i]));
-                        }
-                            
-                    } else{
-                        String matriz = "C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\bdmatrizes/" + dado[++i] + ".txt";
+                switch (dado[0]){
+                    case "-":
                         try {
-                            aux = TADMatriz.carrega(matriz);
+                            aux = TADMatriz.carrega("C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\bdmatrizes/" + dado[1] + ".txt");
                         } catch (FileNotFoundException ex) {
                             Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        if(dado[i].equals("+"))
-                            aux = resultado.soma(aux);
-                        else if(dado[i].equals("-")){
-                            resultado.vezesK(-1);
-                            aux = resultado.soma(aux);
-                        }                   
-                    }
-                
+                        aux.vezesK(-1);
+                        System.out.println("Matriz carregada * -1: " + dado[1]);
+                        System.out.println(aux.toString());
+                        
+                        aux = resultado.soma(aux);
+                        System.out.println("---------------- Subtraida ----------------");
+                        System.out.println(aux.toString());
+                        break;
+
+                    case "+":
+                        try {
+                            aux = TADMatriz.carrega("C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\bdmatrizes/" + dado[1] + ".txt");
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        System.out.println("Matriz carregada: " + dado[1]);
+                        System.out.println(aux.toString());
+                        aux = resultado.soma(aux);
+                        System.out.println("================ Somada a resultado ----------------");
+                        System.out.println(aux.toString());
+                        break;
+
+                    case "t":
+                        aux = aux.transposta();
+                        System.out.println("---------------- Transposta ----------------");
+                        System.out.println(aux.toString());
+                        break;
+
+                    case "*":
+                        if (bdMat.contains(dado[1])) { 
+                            try {
+                                aux = TADMatriz.carrega("C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\bdmatrizes/" + dado[1] + ".txt");
+                            } catch (FileNotFoundException ex) {
+                                Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            System.out.println("Matriz carregada: " + dado[1]);
+                            System.out.println(aux.toString());
+                            System.out.println("Resultado: ");
+                            System.out.println(resultado.toString());
+                            aux = resultado.multi(aux);
+                            System.out.println("---------------- Multiplicada ----------------");
+                            System.out.println(aux.toString());
+                        } else {
+                            resultado.vezesK(Float.parseFloat(dado[1]));
+                            aux = resultado;
+                            System.out.println("---------------- VezesK ----------------");
+                            System.out.println(aux.toString());
+
+                        }
+                        break;
+                }//Fim switch
+            } else { 
+                try {
+                    aux = TADMatriz.carrega("C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\bdmatrizes/" + dado[0] + ".txt");
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                System.out.println("Matriz carregada no else: " + dado[0]);
             }
             resultado = aux;
-        }
+            System.out.println("Resultado: " + resultado.toString());
+            
+        } // Fim while arquivo
 
         try {
             String resposta = resultado.salva("C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\resultado.txt");

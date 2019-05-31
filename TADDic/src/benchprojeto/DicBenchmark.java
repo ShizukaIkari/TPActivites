@@ -57,8 +57,8 @@ class RegMD {
 public class DicBenchmark {
 	public static void main(String[] args) {
 		int TAM_TESTE = 50000;
-                Hash_engine he = new HashEngineDefault();
-		TADDicChain dicA = new TADDicChain(he);
+                //Hash_engine he = new HashEngineDefault();
+		TADDicChain dicA = new TADDicChain(null);
 		ArquivoTxt arqIn = ArquivoTxt.open("./src/benchprojeto/maladireta.csv", "rt");
 		
 		HashMap<Object, Object> hm = new HashMap<Object, Object>();
@@ -92,7 +92,7 @@ public class DicBenchmark {
 		
 		/* Transferindo elementos entre dicionários. */
 		System.out.println("\nTestando a transferência de entradas entre dicionários..");
-		TADDicChain dicB = new TADDicChain(he);
+		TADDicChain dicB = new TADDicChain(null);
 		
 		System.out.println("  Antes da transferência: quantidade de entradas do dicionário A: " + dicA.size());
 		System.out.println("  Antes da transferência: quantidade de entradas do dicionário B: " + dicB.size());
@@ -159,10 +159,10 @@ public class DicBenchmark {
 		   }		   
 		   n++;
         } /* while(it.. */
-       
+            
         System.out.println("teste concluído com sucesso.");
         System.out.println(n + " relações chaves/conteúdos verificadas corretamente!");
-		
+		System.out.println("Elements: " + dicB.elements());
 		System.out.println("\nBenchmark concluído!");
 		
 		System.out.println("\nOs seguinte métodos foram testados:");

@@ -28,7 +28,7 @@ public class TADDicChain {
             vetBuckets[i] = new LinkedList<TDicItem>();
         }
         if(he == null) {
-            he = new HashEngineDefault();
+            this.he = new HashEngineDefault();
         }
         else {
             this.he = he;
@@ -43,7 +43,7 @@ public class TADDicChain {
             vetBuckets[i] = new LinkedList<TDicItem>();
         }
         if(he == null) {
-            he = new HashEngineDefault();
+            this.he = new HashEngineDefault();
         }
         else {
             this.he = he;
@@ -113,6 +113,7 @@ public class TADDicChain {
     /*Recebe a chave, converte para o código hash correspondente e faz a busca,
     retornando se achar*/
     public Object findElement(Object k){
+        
         long hashCode = he.hash_func(k);
         int index = (int) hashCode % vetBuckets.length;
         /*Acessa a lista no índice da chave
