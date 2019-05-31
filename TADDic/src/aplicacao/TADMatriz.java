@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -243,8 +244,9 @@ public class TADMatriz {
         if (quantLinhas() == quantColunas()){
             diagS = new LinkedList();
             int n = quantColunas()-1;
+            
             for (int i = 0;i<quantLinhas();i++)
-                for(int j = quantColunas()-1; j<=0;j--)
+                for(int j = quantColunas()-1; j>=0;j--)
                     if (i+j == n)
                         diagS.add(this.getElem(i,j));
         }
@@ -252,15 +254,16 @@ public class TADMatriz {
             System.out.println("Matriz não quadrada");
         return diagS;
     }
-    
+    //Função auxiliar para debug, liberdade de arredondar floats.
     public String toString(){
-        String matriz = "[ ";
+        String matriz = "";
+        DecimalFormat df = new DecimalFormat("0.00");
         for(int i=0; i<this.getLins();i++){
             for(int j=0;j<this.getCols();j++){
-                matriz += this.getElem(i, j) + " ";
+                matriz += df.format(this.getElem(i, j)) + " ";
             }
             matriz+='\n';
         }
-        return matriz+" ]";
+        return matriz;
     }
 }

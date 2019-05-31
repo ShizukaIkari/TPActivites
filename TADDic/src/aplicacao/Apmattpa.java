@@ -22,9 +22,9 @@ public class Apmattpa {
     public static void main(String[] args){
         TADMatriz resultado = null;
         TADMatriz aux = null;
-	LinkedList<String> bdMat = new LinkedList();
-	String linha;
-        //Matrizes presentes no bd
+        String linha;
+        //Matrizes presentes no bd, para verificação rápida
+        LinkedList<String> bdMat = new LinkedList();
 	bdMat.add("J");
         bdMat.add("A");
         bdMat.add("H");
@@ -45,7 +45,7 @@ public class Apmattpa {
 	while (scanner.hasNext()) {
             linha = scanner.nextLine();
             String[] dado = linha.split(","); //Conteúdo da linha
-            
+            //Se tiver 2 resultados ou se for o t
             if(dado.length >= 1 && !bdMat.contains(dado[0])){
             //Tratando conteúdo do dado
                 switch (dado[0]){
@@ -55,13 +55,9 @@ public class Apmattpa {
                         } catch (FileNotFoundException ex) {
                             Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        //Truque de matematica
                         aux.vezesK(-1);
-                        System.out.println("Matriz carregada * -1: " + dado[1]);
-                        System.out.println(aux.toString());
-                        
                         aux = resultado.soma(aux);
-                        System.out.println("---------------- Subtraida ----------------");
-                        System.out.println(aux.toString());
                         break;
 
                     case "+":
@@ -70,17 +66,11 @@ public class Apmattpa {
                         } catch (FileNotFoundException ex) {
                             Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        System.out.println("Matriz carregada: " + dado[1]);
-                        System.out.println(aux.toString());
                         aux = resultado.soma(aux);
-                        System.out.println("================ Somada a resultado ----------------");
-                        System.out.println(aux.toString());
                         break;
 
                     case "t":
                         aux = aux.transposta();
-                        System.out.println("---------------- Transposta ----------------");
-                        System.out.println(aux.toString());
                         break;
 
                     case "*":
@@ -90,19 +80,10 @@ public class Apmattpa {
                             } catch (FileNotFoundException ex) {
                                 Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            System.out.println("Matriz carregada: " + dado[1]);
-                            System.out.println(aux.toString());
-                            System.out.println("Resultado: ");
-                            System.out.println(resultado.toString());
                             aux = resultado.multi(aux);
-                            System.out.println("---------------- Multiplicada ----------------");
-                            System.out.println(aux.toString());
                         } else {
                             resultado.vezesK(Float.parseFloat(dado[1]));
                             aux = resultado;
-                            System.out.println("---------------- VezesK ----------------");
-                            System.out.println(aux.toString());
-
                         }
                         break;
                 }//Fim switch
@@ -111,23 +92,20 @@ public class Apmattpa {
                     aux = TADMatriz.carrega("C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\bdmatrizes/" + dado[0] + ".txt");
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                System.out.println("Matriz carregada no else: " + dado[0]);
+                }  
             }
-            resultado = aux;
-            System.out.println("Resultado: " + resultado.toString());
-            
+            resultado = aux;    //transferindo resultado            
         } // Fim while arquivo
-
+        
+        //Salvando matriz final no arquivo pedido
         try {
             String resposta = resultado.salva("C:\\Users\\Serenna\\Documents\\GitHub\\TPActivites\\TADDic\\src\\aplicacao\\resultado.txt");
         } catch (IOException ex) {
             Logger.getLogger(Apmattpa.class.getName()).log(Level.SEVERE, null, ex);
         }        
-        System.out.println();
+        //Prints pedidos pela especificação
         System.out.println("Diagonal Principal: ");
         System.out.println(resultado.diagPrincipal());
-        System.out.println();
         System.out.println("Diagonal Secundária: ");
         System.out.println(resultado.diagSecundaria());
     }
