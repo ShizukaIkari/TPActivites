@@ -11,8 +11,8 @@ package tadgrafo;
  */
 public class Vertex {
     private int id;
-    private String label;
-    private Object dado;
+    private String label;   //Nome do vértice escolhido pelo usuário
+    private Object dado;    //Dado guardado pelo vértice
     
     public Vertex(String label, Object dado){
         this.label = label;
