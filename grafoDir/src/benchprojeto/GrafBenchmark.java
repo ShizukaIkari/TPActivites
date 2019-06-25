@@ -1,10 +1,10 @@
-package trabalho2grafo.benchprojeto;
+package benchprojeto;
 
 import java.util.LinkedList;
 
 import _my_tools.Comemora;
 import _my_tools.CoresConsole;
-import trabalho2grafo.tadgrafo.*;
+import tadgrafo.*;
 
 /**
  * @author ernani ref:
@@ -26,7 +26,7 @@ import trabalho2grafo.tadgrafo.*;
 public class GrafBenchmark {
 
     public static void main(String args[]) {
-        String pasta_tgf = "/home/ernani/Dropbox/IFES-2019-1/Disciplinas/TPA/4-Grafos/";
+        String pasta_tgf = "./src/Base-Grafos/";
         String nome_grafo_tgf = "tgfmovies10.txt";
         String arq_grafo = pasta_tgf + nome_grafo_tgf;
         TADGrafoD g = TADGrafoD.carregaTGF(arq_grafo, 12000);
