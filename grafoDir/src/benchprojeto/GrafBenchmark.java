@@ -126,14 +126,14 @@ public class GrafBenchmark {
 
         System.out.print("\nTestando os serviços de aresta ..");
         LinkedList<Edge> lstEdges = g.edges();
-
+        
         for (int i = 0; i < lstEdges.size(); i++) {
             Edge oE = g.getEdge(lstEdges.get(i).getLabel());
             if (oE == null) {
                 System.err.println("\nErro! abortando benchmark: problemas com g.getEdge(<label aresta>);");
                 System.exit(1);
             }
-
+            
             Vertex[] v = g.endVertices(lstEdges.get(i).getLabel());
             if (v.length != 2) {
                 System.err.println("\nErro! abortando benchmark: problemas com g.endVertices(<label aresta>);");
@@ -147,6 +147,7 @@ public class GrafBenchmark {
                 System.exit(1);
             }
         }
+        
         System.out.println("concluído, ok.");
         System.out.println("Os seguintes serviços de aresta foram testados:");
         System.out.println("	public Edge getEdge(String lbl)");
@@ -269,7 +270,7 @@ public class GrafBenchmark {
         System.out.println(CoresConsole.RESET);
 
         System.out.print("Gerando GraphStream..");
-        ToGStream togs = new ToGStream(g, false, false, false);
+        ToGStream togs = new ToGStream(g, true, true, true);
         System.out.println("concluído!");
         togs.exibe();
     }
