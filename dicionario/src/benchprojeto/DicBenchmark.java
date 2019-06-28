@@ -1,4 +1,4 @@
-package trabalho1dic.benchprojeto;
+package benchprojeto;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import trabalho1dic._my_tools.*;
-import trabalho1dic.taddic.TADDicChain;
+import taddic.TADDicChain;
 
 class RegMD {
 

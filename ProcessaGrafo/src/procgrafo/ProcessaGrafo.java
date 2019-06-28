@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package taddic;
+package procgrafo;
 
 /**
  *
  * @author Serenna
  */
-public abstract class Hash_engine {
-    public abstract long hash_func(Object k);
+public class ProcessaGrafo {
+    
 }

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trabalho1dic.hashFunctions;
+package hashFunctions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import trabalho1dic.taddic.Hash_engine;
+import taddic.Hash_engine;
 
 /**
  *

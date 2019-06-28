@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trabalho1dic.aplicacao;
+package aplicacao;
 
-import trabalho1dic.taddic.TADDicChain;
+import taddic.TADDicChain;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
