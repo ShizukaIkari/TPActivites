@@ -21,7 +21,7 @@ import taddic.TADDicChain;
  */
 public class TADGrafoD {
     //matriz guarda id da aresta
-    private int [][] mat = null; //representando o grafo através de matriz de adjacencia
+    public int [][] mat = null; //representando o grafo através de matriz de adjacencia
     private String nome;    //nome escolhido para o grafo
     private int quantVertices = 0;    //contagem de vertices
     private int quantEdges = 0;     //contagem arestas

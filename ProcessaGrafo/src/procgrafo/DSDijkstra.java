@@ -6,7 +6,6 @@
 package procgrafo;
 
 import java.util.LinkedList;
-import taddic.TADDicChain;
 import tadgrafo.Vertex;
 
 /**
@@ -14,10 +13,19 @@ import tadgrafo.Vertex;
  * @author Serenna
  */
 public class DSDijkstra extends DataSet{
-    private int [][] mat_custos = null;
-    TADDicChain dic_vertex_label_int = new TADDicChain(null);
+    private int [] vet_custos = null;
+    private String[] vet_antec;
+    
+    /*Constructor chamado ao final do método cmDijkstra da classe ProcessaGrafo.
+    Ao criar um objeto DSDijkstra, cmDijkstra passa o resultado construído pela 
+    execução do algoritmo de Dijkstra (idem Bellamn-Ford). Ou seja, o vetor de 
+    custos e o vetor de antecessores.*/
+    public DSDijkstra (int[] vet_custos, String[] vet_antec){
+        this.vet_antec = vet_antec;
+        this.vet_custos = vet_custos;
+    }
     @Override
-    public float custo(String origem, String destino) {
+    public int custo(String origem, String destino) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

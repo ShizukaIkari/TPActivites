@@ -13,6 +13,6 @@ import tadgrafo.Vertex;
  * @author Serenna
  */
 public abstract class DataSet {
-    public abstract float custo(String origem, String destino);
+    public abstract int custo(String origem, String destino);
     public abstract LinkedList<Vertex> caminho(String origem, String destino);
 }
